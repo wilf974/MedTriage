@@ -5,306 +5,152 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MedTriage — Scoring d'Urgence</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --vert:    #1a7a4a;
-      --vert-bg: #e8f5ee;
-      --orange:  #d97706;
-      --orange-bg: #fff7e6;
-      --rouge:   #dc2626;
-      --rouge-bg:#fee2e2;
-      --bleu:    #1e40af;
-      --bleu-bg: #eff6ff;
-      --gris:    #6b7280;
-      --fond:    #f1f5f9;
-      --blanc:   #ffffff;
-      --texte:   #1e293b;
-      --bordure: #e2e8f0;
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --vert:#1a7a4a;--vert-bg:#e8f5ee;
+      --orange:#d97706;--orange-bg:#fff7e6;
+      --rouge:#dc2626;--rouge-bg:#fee2e2;
+      --jaune:#ca8a04;--jaune-bg:#fefce8;
+      --bleu:#1e40af;--bleu-bg:#eff6ff;
+      --gris:#6b7280;--fond:#f1f5f9;
+      --blanc:#ffffff;--texte:#1e293b;--bordure:#e2e8f0;
     }
-
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--fond);
-      color: var(--texte);
-      min-height: 100vh;
-    }
+    body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--fond);color:var(--texte);min-height:100vh}
 
     /* HEADER */
-    header {
-      background: #1e293b;
-      color: white;
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      position: sticky; top: 0; z-index: 100;
-    }
-    .logo { display: flex; align-items: center; gap: 12px; }
-    .logo-icon {
-      width: 36px; height: 36px; background: #ef4444;
-      border-radius: 8px; display: flex; align-items: center;
-      justify-content: center; font-size: 20px;
-    }
-    .logo-text { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
-    .logo-sub { font-size: 11px; color: #94a3b8; margin-top: 1px; }
-    .header-right { display: flex; align-items: center; gap: 16px; }
-    .btn-print {
-      background: #334155; border: 1px solid #475569; color: white;
-      padding: 8px 16px; border-radius: 8px; cursor: pointer;
-      font-size: 13px; display: flex; align-items: center; gap: 6px;
-    }
-    .btn-print:hover { background: #475569; }
-    #horloge { font-size: 13px; color: #94a3b8; font-variant-numeric: tabular-nums; }
+    header{background:#1e293b;color:white;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;box-shadow:0 2px 8px rgba(0,0,0,.3);position:sticky;top:0;z-index:100}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo-icon{width:36px;height:36px;background:#ef4444;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px}
+    .logo-text{font-size:20px;font-weight:700}
+    .logo-sub{font-size:11px;color:#94a3b8;margin-top:1px}
+    .header-right{display:flex;align-items:center;gap:12px}
+    .btn-header{background:#334155;border:1px solid #475569;color:white;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px}
+    .btn-header:hover{background:#475569}
+    #horloge{font-size:13px;color:#94a3b8;font-variant-numeric:tabular-nums}
 
     /* TABS */
-    .tabs-container {
-      background: white;
-      border-bottom: 1px solid var(--bordure);
-      padding: 0 24px;
-      display: flex;
-      gap: 4px;
-      overflow-x: auto;
-    }
-    .tab {
-      padding: 16px 20px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--gris);
-      border-bottom: 3px solid transparent;
-      white-space: nowrap;
-      transition: all 0.15s;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .tab:hover { color: var(--texte); }
-    .tab.active { color: var(--bleu); border-bottom-color: var(--bleu); font-weight: 600; }
-    .tab-badge {
-      font-size: 11px; padding: 2px 7px; border-radius: 10px;
-      background: var(--fond); color: var(--gris); font-weight: 600;
-    }
-    .tab.active .tab-badge { background: var(--bleu-bg); color: var(--bleu); }
+    .tabs-container{background:white;border-bottom:1px solid var(--bordure);padding:0 24px;display:flex;gap:4px;overflow-x:auto}
+    .tab{padding:16px 20px;cursor:pointer;font-size:14px;font-weight:500;color:var(--gris);border-bottom:3px solid transparent;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:8px}
+    .tab:hover{color:var(--texte)}
+    .tab.active{color:var(--bleu);border-bottom-color:var(--bleu);font-weight:600}
+    .tab-badge{font-size:11px;padding:2px 7px;border-radius:10px;background:var(--fond);color:var(--gris);font-weight:600}
+    .tab.active .tab-badge{background:var(--bleu-bg);color:var(--bleu)}
 
     /* LAYOUT */
-    .main { max-width: 1100px; margin: 0 auto; padding: 24px; }
-    .panel { display: none; }
-    .panel.active { display: block; }
-
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-
-    @media (max-width: 768px) {
-      .grid-2, .grid-3 { grid-template-columns: 1fr; }
-      .main { padding: 16px; }
-    }
+    .main{max-width:1100px;margin:0 auto;padding:24px}
+    .panel{display:none}
+    .panel.active{display:block}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    @media(max-width:768px){.grid-2{grid-template-columns:1fr}.main{padding:16px}}
 
     /* CARDS */
-    .card {
-      background: white; border-radius: 12px;
-      border: 1px solid var(--bordure);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-      overflow: hidden;
-    }
-    .card-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--bordure);
-      display: flex; align-items: center; gap: 10px;
-    }
-    .card-header h3 { font-size: 15px; font-weight: 600; }
-    .card-header .subtitle { font-size: 12px; color: var(--gris); margin-top: 2px; }
-    .card-body { padding: 20px; }
-    .card-icon {
-      width: 36px; height: 36px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
-    }
+    .card{background:white;border-radius:12px;border:1px solid var(--bordure);box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;margin-bottom:20px}
+    .card-header{padding:16px 20px;border-bottom:1px solid var(--bordure);display:flex;align-items:center;gap:10px}
+    .card-header h3{font-size:15px;font-weight:600}
+    .card-header .subtitle{font-size:12px;color:var(--gris);margin-top:2px}
+    .card-body{padding:20px}
+    .card-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 
-    /* FORM ELEMENTS */
-    .field { margin-bottom: 16px; }
-    .field label {
-      display: flex; justify-content: space-between; align-items: baseline;
-      font-size: 13px; font-weight: 500; margin-bottom: 6px; color: #374151;
-    }
-    .field label .unit { font-size: 12px; color: var(--gris); font-weight: 400; }
-    .field label .val-display {
-      font-size: 15px; font-weight: 700; color: var(--bleu);
-      min-width: 50px; text-align: right;
-    }
+    /* FORM */
+    .field{margin-bottom:16px}
+    .field label{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;font-weight:500;margin-bottom:6px;color:#374151}
+    .field label .unit{font-size:12px;color:var(--gris);font-weight:400}
+    .field label .val-display{font-size:15px;font-weight:700;color:var(--bleu);min-width:50px;text-align:right}
+    input[type=range]{width:100%;height:6px;-webkit-appearance:none;background:linear-gradient(to right,var(--bleu) 0%,var(--bleu) var(--pct,50%),#e2e8f0 var(--pct,50%));border-radius:3px;outline:none;cursor:pointer}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:var(--bleu);border-radius:50%;cursor:pointer;border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+    .range-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--gris);margin-top:2px}
+    .toggle-group{display:flex;gap:8px}
+    .toggle-btn{flex:1;padding:10px;border:1px solid var(--bordure);border-radius:8px;background:white;cursor:pointer;font-size:13px;font-weight:500;color:var(--gris);transition:all .15s;text-align:center}
+    .toggle-btn.active{background:var(--bleu-bg);border-color:var(--bleu);color:var(--bleu);font-weight:600}
+    .select-group{display:flex;flex-direction:column;gap:6px}
+    .select-opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--bordure);border-radius:8px;cursor:pointer;transition:all .15s}
+    .select-opt:hover{background:var(--fond)}
+    .select-opt.active{background:var(--bleu-bg);border-color:var(--bleu)}
+    .select-opt input[type=radio]{accent-color:var(--bleu);width:16px;height:16px}
+    .select-opt-label{flex:1;font-size:13px;font-weight:500}
+    .select-opt-sub{font-size:11px;color:var(--gris)}
+    .select-opt-score{font-size:13px;font-weight:700;color:var(--bleu);background:var(--bleu-bg);padding:2px 8px;border-radius:6px}
+    .section-title{font-size:12px;font-weight:700;color:var(--gris);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
 
-    input[type=range] {
-      width: 100%; height: 6px; -webkit-appearance: none;
-      background: linear-gradient(to right, var(--bleu) 0%, var(--bleu) var(--pct, 50%), #e2e8f0 var(--pct, 50%));
-      border-radius: 3px; outline: none; cursor: pointer;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 18px; height: 18px;
-      background: var(--bleu); border-radius: 50%; cursor: pointer;
-      border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    }
-    input[type=number] {
-      width: 100%; padding: 10px 12px; border: 1px solid var(--bordure);
-      border-radius: 8px; font-size: 15px; outline: none;
-    }
-    input[type=number]:focus { border-color: var(--bleu); box-shadow: 0 0 0 3px rgba(30,64,175,0.1); }
+    /* RESULT */
+    .result-box{border-radius:12px;padding:20px;margin-top:4px;border:2px solid;transition:all .3s}
+    .result-box.vert{background:var(--vert-bg);border-color:var(--vert)}
+    .result-box.orange{background:var(--orange-bg);border-color:var(--orange)}
+    .result-box.rouge{background:var(--rouge-bg);border-color:var(--rouge)}
+    .result-box.gris{background:var(--fond);border-color:var(--bordure)}
+    .result-score-row{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+    .result-score-num{font-size:52px;font-weight:800;line-height:1}
+    .result-box.vert .result-score-num{color:var(--vert)}
+    .result-box.orange .result-score-num{color:var(--orange)}
+    .result-box.rouge .result-score-num{color:var(--rouge)}
+    .result-alert{font-size:16px;font-weight:700;margin-bottom:8px}
+    .result-box.vert .result-alert{color:var(--vert)}
+    .result-box.orange .result-alert{color:var(--orange)}
+    .result-box.rouge .result-alert{color:var(--rouge)}
+    .result-mortalite{font-size:13px;padding:6px 10px;border-radius:6px;display:inline-block;margin-bottom:10px;background:rgba(0,0,0,.06);font-weight:600}
+    .result-cta{font-size:13px;line-height:1.6;padding:10px 14px;border-radius:8px;background:rgba(0,0,0,.05)}
+    .gauge-bar{width:100%;height:10px;background:#e2e8f0;border-radius:5px;overflow:hidden;margin:10px 0}
+    .gauge-fill{height:100%;border-radius:5px;transition:width .4s ease}
 
-    .toggle-group { display: flex; gap: 8px; }
-    .toggle-btn {
-      flex: 1; padding: 10px; border: 1px solid var(--bordure);
-      border-radius: 8px; background: white; cursor: pointer;
-      font-size: 13px; font-weight: 500; color: var(--gris);
-      transition: all 0.15s; text-align: center;
-    }
-    .toggle-btn.active {
-      background: var(--bleu-bg); border-color: var(--bleu);
-      color: var(--bleu); font-weight: 600;
-    }
-
-    .select-group { display: flex; flex-direction: column; gap: 6px; }
-    .select-opt {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px; border: 1px solid var(--bordure);
-      border-radius: 8px; cursor: pointer; transition: all 0.15s;
-    }
-    .select-opt:hover { background: var(--fond); }
-    .select-opt.active { background: var(--bleu-bg); border-color: var(--bleu); }
-    .select-opt input[type=radio] { accent-color: var(--bleu); width: 16px; height: 16px; }
-    .select-opt-label { flex: 1; font-size: 13px; font-weight: 500; }
-    .select-opt-sub { font-size: 11px; color: var(--gris); }
-    .select-opt-score {
-      font-size: 13px; font-weight: 700; color: var(--bleu);
-      background: var(--bleu-bg); padding: 2px 8px; border-radius: 6px;
-    }
-
-    /* RESULT BOX */
-    .result-box {
-      border-radius: 12px; padding: 20px; margin-top: 4px;
-      border: 2px solid; transition: all 0.3s;
-    }
-    .result-box.vert   { background: var(--vert-bg);   border-color: var(--vert);   }
-    .result-box.orange { background: var(--orange-bg); border-color: var(--orange); }
-    .result-box.rouge  { background: var(--rouge-bg);  border-color: var(--rouge);  }
-    .result-box.gris   { background: var(--fond);      border-color: var(--bordure);}
-
-    .result-score-row { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
-    .result-score-num {
-      font-size: 52px; font-weight: 800; line-height: 1;
-    }
-    .result-box.vert   .result-score-num { color: var(--vert);   }
-    .result-box.orange .result-score-num { color: var(--orange); }
-    .result-box.rouge  .result-score-num { color: var(--rouge);  }
-    .result-score-label { font-size: 13px; color: var(--gris); }
-    .result-score-max   { font-size: 15px; font-weight: 600; color: var(--gris); }
-
-    .result-alert {
-      font-size: 16px; font-weight: 700; margin-bottom: 8px;
-    }
-    .result-box.vert   .result-alert { color: var(--vert);   }
-    .result-box.orange .result-alert { color: var(--orange); }
-    .result-box.rouge  .result-alert { color: var(--rouge);  }
-
-    .result-mortalite {
-      font-size: 13px; padding: 6px 10px; border-radius: 6px;
-      display: inline-block; margin-bottom: 10px;
-      background: rgba(0,0,0,0.06); font-weight: 600;
-    }
-    .result-cta {
-      font-size: 13px; line-height: 1.6;
-      padding: 10px 14px; border-radius: 8px; background: rgba(0,0,0,0.05);
-    }
-
-    /* GAUGE */
-    .gauge-bar {
-      width: 100%; height: 10px; background: #e2e8f0;
-      border-radius: 5px; overflow: hidden; margin: 10px 0;
-    }
-    .gauge-fill { height: 100%; border-radius: 5px; transition: width 0.4s ease; }
+    /* AUDIT LOG */
+    .audit-log{background:#0f172a;border-radius:10px;padding:16px;font-family:'Courier New',monospace;font-size:12px;color:#94a3b8;line-height:1.8;margin-top:12px;max-height:220px;overflow-y:auto}
+    .audit-log .log-title{color:#38bdf8;font-weight:700;margin-bottom:8px;font-size:13px}
+    .audit-log .log-param{color:#e2e8f0}
+    .audit-log .log-score{color:#4ade80;font-weight:700}
+    .audit-log .log-total{color:#fbbf24;font-weight:700;border-top:1px solid #334155;margin-top:6px;padding-top:6px}
+    .audit-log .log-warn{color:#f87171}
 
     /* TRIAGE GLOBAL */
-    .triage-header {
-      text-align: center; padding: 28px 20px;
-      border-radius: 12px; margin-bottom: 20px;
-      border: 2px solid;
-    }
-    .triage-header.CRITIQUE { background: var(--rouge-bg); border-color: var(--rouge); }
-    .triage-header.URGENT   { background: var(--orange-bg); border-color: var(--orange); }
-    .triage-header.SEMI     { background: #fefce8; border-color: #ca8a04; }
-    .triage-header.STABLE   { background: var(--vert-bg); border-color: var(--vert); }
+    .triage-header{text-align:center;padding:28px 20px;border-radius:12px;margin-bottom:20px;border:2px solid}
+    .triage-header.CRITIQUE{background:var(--rouge-bg);border-color:var(--rouge)}
+    .triage-header.URGENT{background:var(--orange-bg);border-color:var(--orange)}
+    .triage-header.SEMI{background:var(--jaune-bg);border-color:var(--jaune)}
+    .triage-header.STABLE{background:var(--vert-bg);border-color:var(--vert)}
+    .triage-niveau{font-size:28px;font-weight:800;margin-bottom:6px}
+    .triage-header.CRITIQUE .triage-niveau{color:var(--rouge)}
+    .triage-header.URGENT .triage-niveau{color:var(--orange)}
+    .triage-header.SEMI .triage-niveau{color:var(--jaune)}
+    .triage-header.STABLE .triage-niveau{color:var(--vert)}
+    .triage-sub{font-size:14px;color:#475569}
+    .triage-explication{margin-top:10px;font-size:13px;font-weight:600;padding:8px 14px;border-radius:8px;background:rgba(0,0,0,.06);display:inline-block}
 
-    .triage-niveau {
-      font-size: 28px; font-weight: 800; margin-bottom: 6px;
-    }
-    .triage-header.CRITIQUE .triage-niveau { color: var(--rouge); }
-    .triage-header.URGENT   .triage-niveau { color: var(--orange); }
-    .triage-header.SEMI     .triage-niveau { color: #ca8a04; }
-    .triage-header.STABLE   .triage-niveau { color: var(--vert); }
+    .scores-recap{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+    .score-mini{background:white;border:1px solid var(--bordure);border-radius:10px;padding:14px;text-align:center}
+    .score-mini-val{font-size:28px;font-weight:800;color:var(--texte)}
+    .score-mini-nom{font-size:11px;color:var(--gris);font-weight:600;text-transform:uppercase;margin-top:2px}
+    .score-mini-alerte{font-size:11px;font-weight:700;margin-top:6px;padding:3px 8px;border-radius:4px}
 
-    .triage-sub { font-size: 14px; color: #475569; }
+    .action-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--bordure)}
+    .action-item:last-child{border-bottom:none}
+    .action-num{width:24px;height:24px;border-radius:50%;background:var(--bleu);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .action-text{font-size:13px;line-height:1.5}
+    .action-text strong{display:block;font-size:13px;margin-bottom:2px}
 
-    .scores-recap { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 20px; }
-    .score-mini {
-      background: white; border: 1px solid var(--bordure);
-      border-radius: 10px; padding: 14px; text-align: center;
-    }
-    .score-mini-val { font-size: 28px; font-weight: 800; color: var(--texte); }
-    .score-mini-nom { font-size: 11px; color: var(--gris); font-weight: 600; text-transform: uppercase; margin-top: 2px; }
-    .score-mini-alerte { font-size: 11px; font-weight: 700; margin-top: 6px; padding: 3px 8px; border-radius: 4px; }
-
-    .actions-card .action-item {
-      display: flex; gap: 12px; align-items: flex-start;
-      padding: 12px 0; border-bottom: 1px solid var(--bordure);
-    }
-    .actions-card .action-item:last-child { border-bottom: none; }
-    .action-num {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: var(--bleu); color: white;
-      font-size: 12px; font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .action-text { font-size: 13px; line-height: 1.5; }
-    .action-text strong { display: block; font-size: 13px; margin-bottom: 2px; }
+    /* SIMULATIONS */
+    .sim-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+    .sim-btn{padding:10px 18px;border-radius:8px;border:2px solid;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s;display:flex;align-items:center;gap:8px}
+    .sim-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+    .sim-btn.rouge{background:var(--rouge-bg);border-color:var(--rouge);color:var(--rouge)}
+    .sim-btn.orange{background:var(--orange-bg);border-color:var(--orange);color:var(--orange)}
+    .sim-btn.bleu{background:var(--bleu-bg);border-color:var(--bleu);color:var(--bleu)}
+    .sim-btn.gris{background:var(--fond);border-color:var(--bordure);color:var(--gris)}
 
     /* PATIENT BAR */
-    .patient-bar {
-      background: white; border: 1px solid var(--bordure);
-      border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;
-      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-    }
-    .patient-bar label { font-size: 12px; font-weight: 600; color: var(--gris); }
-    .patient-bar input[type=text] {
-      border: 1px solid var(--bordure); border-radius: 6px;
-      padding: 6px 10px; font-size: 13px; outline: none; width: 180px;
-    }
-    .patient-bar input[type=text]:focus { border-color: var(--bleu); }
-    .patient-field { display: flex; flex-direction: column; gap: 4px; }
-    .patient-id { font-size: 11px; color: var(--gris); }
+    .patient-bar{background:white;border:1px solid var(--bordure);border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+    .patient-bar label{font-size:12px;font-weight:600;color:var(--gris)}
+    .patient-bar input[type=text]{border:1px solid var(--bordure);border-radius:6px;padding:6px 10px;font-size:13px;outline:none;width:180px}
+    .patient-bar input[type=text]:focus{border-color:var(--bleu)}
+    .patient-field{display:flex;flex-direction:column;gap:4px}
+    .patient-id{font-size:11px;color:var(--gris)}
 
     /* DISCLAIMER */
-    .disclaimer {
-      margin-top: 24px; padding: 14px 18px;
-      background: #fef9c3; border: 1px solid #fbbf24;
-      border-radius: 8px; font-size: 12px; color: #78350f; line-height: 1.5;
-    }
+    .disclaimer{margin-top:24px;padding:14px 18px;background:#fef9c3;border:1px solid #fbbf24;border-radius:8px;font-size:12px;color:#78350f;line-height:1.5}
 
-    /* PRINT */
-    @media print {
-      header, .tabs-container, .btn-print, .patient-bar { display: none !important; }
-      .panel { display: block !important; }
-      .card { break-inside: avoid; box-shadow: none; }
-      body { background: white; }
-    }
-
-    /* SECTION TITLE */
-    .section-title {
-      font-size: 12px; font-weight: 700; color: var(--gris);
-      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
-    }
-
-    .range-labels {
-      display: flex; justify-content: space-between;
-      font-size: 10px; color: var(--gris); margin-top: 2px;
+    @media print{
+      header,.tabs-container,.btn-header,.patient-bar,.sim-btns{display:none!important}
+      .panel{display:block!important}
+      .card{break-inside:avoid;box-shadow:none}
+      body{background:white}
     }
   </style>
 </head>
@@ -313,33 +159,19 @@
 <header>
   <div class="logo">
     <div class="logo-icon">🏥</div>
-    <div>
-      <div class="logo-text">MedTriage</div>
-      <div class="logo-sub">Scoring d'urgence clinique</div>
-    </div>
+    <div><div class="logo-text">MedTriage</div><div class="logo-sub">Emergency Clinical Scoring</div></div>
   </div>
   <div class="header-right">
     <span id="horloge"></span>
-    <button class="btn-print" onclick="window.print()">🖨️ Imprimer</button>
+    <button class="btn-header" onclick="window.print()">🖨️ Imprimer</button>
   </div>
 </header>
 
 <div class="tabs-container">
-  <div class="tab active" onclick="showTab('triage')" id="tab-triage">
-    🚨 Triage complet
-  </div>
-  <div class="tab" onclick="showTab('news2')" id="tab-news2">
-    📊 NEWS2
-    <span class="tab-badge" id="badge-news2">–</span>
-  </div>
-  <div class="tab" onclick="showTab('qsofa')" id="tab-qsofa">
-    🦠 qSOFA
-    <span class="tab-badge" id="badge-qsofa">–</span>
-  </div>
-  <div class="tab" onclick="showTab('heart')" id="tab-heart">
-    ❤️ HEART
-    <span class="tab-badge" id="badge-heart">–</span>
-  </div>
+  <div class="tab active" onclick="showTab('triage')" id="tab-triage">🚨 Triage complet</div>
+  <div class="tab" onclick="showTab('news2')" id="tab-news2">📊 NEWS2 <span class="tab-badge" id="badge-news2">–</span></div>
+  <div class="tab" onclick="showTab('qsofa')" id="tab-qsofa">🦠 qSOFA <span class="tab-badge" id="badge-qsofa">–</span></div>
+  <div class="tab" onclick="showTab('heart')" id="tab-heart">❤️ HEART <span class="tab-badge" id="badge-heart">–</span></div>
 </div>
 
 <div class="main">
@@ -348,86 +180,98 @@
   <div class="patient-bar">
     <div class="patient-field">
       <label>ID / Nom patient</label>
-      <input type="text" id="patient-nom" placeholder="Patient anonyme" oninput="updateTriage()">
+      <input type="text" id="patient-nom" placeholder="Patient anonyme">
     </div>
     <div class="patient-field">
       <label>N° de lit</label>
-      <input type="text" id="patient-lit" placeholder="ex. Lit 12 — Secteur A" style="width:160px" oninput="updateTriage()">
+      <input type="text" id="patient-lit" placeholder="Lit 12 — Secteur A" style="width:160px">
     </div>
     <div class="patient-field">
-      <label>Date / Heure évaluation</label>
+      <label>Évaluation</label>
       <span class="patient-id" id="datetime-eval">–</span>
     </div>
   </div>
 
-  <!-- ===== PANEL TRIAGE ===== -->
-  <div class="panel active" id="panel-triage">
+  <!-- SIMULATIONS -->
+  <div class="sim-btns">
+    <span style="font-size:13px;font-weight:600;color:var(--gris);align-self:center">Simuler :</span>
+    <button class="sim-btn rouge" onclick="simulate('sepsis')">🦠 Sepsis sévère</button>
+    <button class="sim-btn orange" onclick="simulate('acs')">❤️ SCA probable</button>
+    <button class="sim-btn bleu" onclick="simulate('resp')">🫁 Détresse respiratoire</button>
+    <button class="sim-btn gris" onclick="simulate('stable')">✓ Patient stable</button>
+  </div>
 
+  <!-- ===== TRIAGE ===== -->
+  <div class="panel active" id="panel-triage">
     <div id="triage-header-box" class="triage-header STABLE">
       <div class="triage-niveau" id="triage-niveau">🟢 STABLE</div>
-      <div class="triage-sub" id="triage-sub">Renseignez les paramètres dans les onglets NEWS2, qSOFA et HEART</div>
+      <div class="triage-sub" id="triage-sub">Renseignez les paramètres dans les onglets</div>
+      <div class="triage-explication" id="triage-explication" style="display:none"></div>
     </div>
 
     <div class="scores-recap">
       <div class="score-mini">
         <div class="score-mini-val" id="recap-news2">–</div>
         <div class="score-mini-nom">NEWS2 /20</div>
-        <div class="score-mini-alerte" id="recap-news2-alerte" style="background:#f1f5f9;color:#6b7280;">–</div>
+        <div class="score-mini-alerte" id="recap-news2-alerte" style="background:#f1f5f9;color:#6b7280">–</div>
       </div>
       <div class="score-mini">
         <div class="score-mini-val" id="recap-qsofa">–</div>
         <div class="score-mini-nom">qSOFA /3</div>
-        <div class="score-mini-alerte" id="recap-qsofa-alerte" style="background:#f1f5f9;color:#6b7280;">–</div>
+        <div class="score-mini-alerte" id="recap-qsofa-alerte" style="background:#f1f5f9;color:#6b7280">–</div>
       </div>
       <div class="score-mini">
         <div class="score-mini-val" id="recap-heart">–</div>
         <div class="score-mini-nom">HEART /10</div>
-        <div class="score-mini-alerte" id="recap-heart-alerte" style="background:#f1f5f9;color:#6b7280;">–</div>
+        <div class="score-mini-alerte" id="recap-heart-alerte" style="background:#f1f5f9;color:#6b7280">–</div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon" style="background:#fef2f2;">📋</div>
-        <div>
-          <h3>Conduite à tenir</h3>
-          <div class="subtitle">Actions prioritaires basées sur les scores combinés</div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:#fef2f2">📋</div>
+          <div><h3>Conduite à tenir</h3><div class="subtitle">Actions prioritaires — scores combinés</div></div>
+        </div>
+        <div class="card-body" id="actions-list">
+          <div class="action-item"><div class="action-num">→</div><div class="action-text">Renseignez les paramètres pour générer les recommandations.</div></div>
         </div>
       </div>
-      <div class="card-body actions-card" id="actions-list">
-        <div class="action-item">
-          <div class="action-num">→</div>
-          <div class="action-text"><span>Renseignez les paramètres dans les onglets pour générer les recommandations.</span></div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:#0f172a">⌨️</div>
+          <div><h3>Journal d'audit</h3><div class="subtitle">Décomposition détaillée des scores</div></div>
+        </div>
+        <div class="card-body" style="padding:12px">
+          <div class="audit-log" id="audit-log">
+            <div class="log-title">// MedTriage Audit Log</div>
+            <div style="color:#475569">Lancez un calcul pour voir la décomposition.</div>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="disclaimer">
-      ⚠️ <strong>Avertissement clinique :</strong> MedTriage est un outil d'aide à la décision. Il ne remplace pas le jugement clinique d'un professionnel de santé qualifié. Les scores NEWS2, qSOFA et HEART sont des outils de stratification du risque validés dans la littérature médicale internationale — ils ne constituent pas un diagnostic.
+      ⚠️ <strong>Avertissement clinique :</strong> MedTriage est un outil d'aide à la décision. Il ne remplace pas le jugement clinique d'un professionnel de santé qualifié. Les scores NEWS2, qSOFA et HEART sont des outils de stratification du risque validés — ils ne constituent pas un diagnostic.
     </div>
   </div>
 
-  <!-- ===== PANEL NEWS2 ===== -->
+  <!-- ===== NEWS2 ===== -->
   <div class="panel" id="panel-news2">
     <div class="grid-2">
       <div>
-        <div class="card" style="margin-bottom:20px">
-          <div class="card-header">
-            <div class="card-icon" style="background:#eff6ff;">🫁</div>
-            <div>
-              <h3>Paramètres respiratoires</h3>
-              <div class="subtitle">Fréquence, saturation, oxygénothérapie</div>
-            </div>
-          </div>
+        <div class="card">
+          <div class="card-header"><div class="card-icon" style="background:#eff6ff">🫁</div><div><h3>Paramètres respiratoires</h3><div class="subtitle">Fréquence, saturation, O₂</div></div></div>
           <div class="card-body">
             <div class="field">
               <label>Fréquence respiratoire <span class="unit">cycles/min</span> <span class="val-display" id="lbl-rr">16</span></label>
-              <input type="range" id="rr" min="4" max="40" value="16" oninput="syncSlider(this,'lbl-rr');calcNews2()">
+              <input type="range" id="rr" min="4" max="40" value="16" oninput="syncSlider(this,'lbl-rr');compute()">
               <div class="range-labels"><span>4</span><span>Normal 12–20</span><span>40</span></div>
             </div>
             <div class="field">
               <label>SpO₂ <span class="unit">%</span> <span class="val-display" id="lbl-spo2">97</span></label>
-              <input type="range" id="spo2" min="70" max="100" value="97" oninput="syncSlider(this,'lbl-spo2');calcNews2()">
+              <input type="range" id="spo2" min="70" max="100" value="97" oninput="syncSlider(this,'lbl-spo2');compute()">
               <div class="range-labels"><span>70%</span><span>Normal ≥96%</span><span>100%</span></div>
             </div>
             <div class="field">
@@ -439,113 +283,73 @@
             </div>
           </div>
         </div>
-
         <div class="card">
-          <div class="card-header">
-            <div class="card-icon" style="background:#fef2f2;">❤️</div>
-            <div>
-              <h3>Paramètres cardio-vasculaires</h3>
-              <div class="subtitle">Tension artérielle, fréquence cardiaque</div>
-            </div>
-          </div>
+          <div class="card-header"><div class="card-icon" style="background:#fef2f2">❤️</div><div><h3>Cardio-vasculaire</h3><div class="subtitle">Tension artérielle, fréquence cardiaque</div></div></div>
           <div class="card-body">
             <div class="field">
               <label>TA systolique <span class="unit">mmHg</span> <span class="val-display" id="lbl-ta">120</span></label>
-              <input type="range" id="ta" min="60" max="240" value="120" oninput="syncSlider(this,'lbl-ta');calcNews2()">
+              <input type="range" id="ta" min="60" max="240" value="120" oninput="syncSlider(this,'lbl-ta');compute()">
               <div class="range-labels"><span>60</span><span>Normal 110–219</span><span>240</span></div>
             </div>
             <div class="field">
               <label>Fréquence cardiaque <span class="unit">bpm</span> <span class="val-display" id="lbl-fc">75</span></label>
-              <input type="range" id="fc" min="20" max="180" value="75" oninput="syncSlider(this,'lbl-fc');calcNews2()">
+              <input type="range" id="fc" min="20" max="180" value="75" oninput="syncSlider(this,'lbl-fc');compute()">
               <div class="range-labels"><span>20</span><span>Normal 51–90</span><span>180</span></div>
             </div>
           </div>
         </div>
       </div>
-
       <div>
-        <div class="card" style="margin-bottom:20px">
-          <div class="card-header">
-            <div class="card-icon" style="background:#f0fdf4;">🌡️</div>
-            <div>
-              <h3>Paramètres généraux</h3>
-              <div class="subtitle">Température, conscience</div>
-            </div>
-          </div>
+        <div class="card">
+          <div class="card-header"><div class="card-icon" style="background:#f0fdf4">🌡️</div><div><h3>Paramètres généraux</h3><div class="subtitle">Température, conscience</div></div></div>
           <div class="card-body">
             <div class="field">
               <label>Température <span class="unit">°C</span> <span class="val-display" id="lbl-temp">37.0</span></label>
-              <input type="range" id="temp" min="330" max="420" value="370" oninput="syncTemp(this);calcNews2()">
+              <input type="range" id="temp" min="330" max="420" value="370" oninput="syncTemp(this);compute()">
               <div class="range-labels"><span>33°</span><span>Normal 36–38°</span><span>42°</span></div>
             </div>
             <div class="field">
               <label>Conscience (AVPU)</label>
               <div class="select-group">
-                <label class="select-opt active" id="avpu-a">
-                  <input type="radio" name="avpu" value="0" checked onchange="calcNews2()">
-                  <div class="select-opt-label">A — Alerte (Alert)</div>
-                  <div class="select-opt-score">+0</div>
-                </label>
-                <label class="select-opt" id="avpu-v">
-                  <input type="radio" name="avpu" value="1" onchange="calcNews2()">
-                  <div class="select-opt-label">V/P/U — Confusion, répond à la voix, douleur ou inconscient</div>
-                  <div class="select-opt-score" style="color:var(--rouge);background:var(--rouge-bg)">+3</div>
-                </label>
+                <label class="select-opt active" id="avpu-a"><input type="radio" name="avpu" value="0" checked onchange="compute()"><div class="select-opt-label">A — Alerte</div><div class="select-opt-score">+0</div></label>
+                <label class="select-opt" id="avpu-v"><input type="radio" name="avpu" value="1" onchange="compute()"><div class="select-opt-label">V/P/U — Confusion, ou répond voix/douleur, ou inconscient</div><div class="select-opt-score" style="color:var(--rouge);background:var(--rouge-bg)">+3</div></label>
               </div>
             </div>
           </div>
         </div>
-
         <div class="card">
-          <div class="card-header">
-            <div class="card-icon" style="background:#fff7ed;">📊</div>
-            <div>
-              <h3>Résultat NEWS2</h3>
-              <div class="subtitle">National Early Warning Score 2 — NHS UK</div>
-            </div>
-          </div>
+          <div class="card-header"><div class="card-icon" style="background:#fff7ed">📊</div><div><h3>Résultat NEWS2</h3><div class="subtitle">National Early Warning Score 2 — NHS UK</div></div></div>
           <div class="card-body">
             <div class="result-box gris" id="news2-result">
               <div class="result-score-row">
                 <div class="result-score-num" id="news2-score">0</div>
-                <div>
-                  <div class="result-score-max">/20</div>
-                  <div class="result-score-label">Score NEWS2</div>
-                </div>
+                <div><div style="font-size:15px;font-weight:600;color:var(--gris)">/20</div><div style="font-size:13px;color:var(--gris)">Score NEWS2</div></div>
               </div>
               <div class="gauge-bar"><div class="gauge-fill" id="news2-gauge" style="width:0%;background:#e2e8f0"></div></div>
               <div class="result-alert" id="news2-alert">Renseignez les paramètres</div>
-              <div class="result-cta" id="news2-cta">Fréquence de surveillance et actions recommandées apparaîtront ici.</div>
+              <div class="result-cta" id="news2-cta">—</div>
             </div>
-            <div style="margin-top:14px;font-size:11px;color:var(--gris);line-height:1.5">
-              Référence : Royal College of Physicians, <em>National Early Warning Score (NEWS) 2</em>, Londres 2017.
-            </div>
+            <div style="margin-top:14px;font-size:11px;color:var(--gris);line-height:1.5">Référence : Royal College of Physicians, <em>NEWS2</em>, Londres 2017.</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ===== PANEL qSOFA ===== -->
+  <!-- ===== qSOFA ===== -->
   <div class="panel" id="panel-qsofa">
     <div class="grid-2">
       <div class="card">
-        <div class="card-header">
-          <div class="card-icon" style="background:#fef2f2;">🦠</div>
-          <div>
-            <h3>Critères qSOFA</h3>
-            <div class="subtitle">3 critères binaires — dépistage sepsis hors réanimation</div>
-          </div>
-        </div>
+        <div class="card-header"><div class="card-icon" style="background:#fef2f2">🦠</div><div><h3>Critères qSOFA</h3><div class="subtitle">3 critères binaires</div></div></div>
         <div class="card-body">
           <div class="field">
             <label>Fréquence respiratoire <span class="unit">cycles/min</span> <span class="val-display" id="lbl-qrr">16</span></label>
-            <input type="range" id="qrr" min="4" max="45" value="16" oninput="syncSlider(this,'lbl-qrr');calcQsofa()">
+            <input type="range" id="qrr" min="4" max="45" value="16" oninput="syncSlider(this,'lbl-qrr');compute()">
             <div class="range-labels"><span>4</span><span>Seuil ≥22</span><span>45</span></div>
           </div>
           <div class="field">
             <label>TA systolique <span class="unit">mmHg</span> <span class="val-display" id="lbl-qta">120</span></label>
-            <input type="range" id="qta" min="50" max="200" value="120" oninput="syncSlider(this,'lbl-qta');calcQsofa()">
+            <input type="range" id="qta" min="50" max="200" value="120" oninput="syncSlider(this,'lbl-qta');compute()">
             <div class="range-labels"><span>50</span><span>Seuil ≤100</span><span>200</span></div>
           </div>
           <div class="field">
@@ -561,448 +365,456 @@
           </div>
         </div>
       </div>
-
       <div class="card">
-        <div class="card-header">
-          <div class="card-icon" style="background:#fef2f2;">🔬</div>
-          <div>
-            <h3>Résultat qSOFA</h3>
-            <div class="subtitle">Surviving Sepsis Campaign 2018</div>
-          </div>
-        </div>
+        <div class="card-header"><div class="card-icon" style="background:#fef2f2">🔬</div><div><h3>Résultat qSOFA</h3><div class="subtitle">Surviving Sepsis Campaign 2018</div></div></div>
         <div class="card-body">
           <div class="result-box gris" id="qsofa-result">
             <div class="result-score-row">
               <div class="result-score-num" id="qsofa-score">0</div>
-              <div>
-                <div class="result-score-max">/3</div>
-                <div class="result-score-label">Score qSOFA</div>
-              </div>
+              <div><div style="font-size:15px;font-weight:600;color:var(--gris)">/3</div><div style="font-size:13px;color:var(--gris)">Score qSOFA</div></div>
             </div>
             <div class="gauge-bar"><div class="gauge-fill" id="qsofa-gauge" style="width:0%;background:#e2e8f0"></div></div>
             <div class="result-alert" id="qsofa-alert">Renseignez les critères</div>
             <div class="result-mortalite" id="qsofa-mortalite" style="display:none"></div>
-            <div class="result-cta" id="qsofa-cta">Les actions recommandées apparaîtront ici.</div>
+            <div class="result-cta" id="qsofa-cta">—</div>
           </div>
-
           <div style="margin-top:16px">
             <div class="section-title">Bundle Sepsis 1 heure (si score ≥ 2)</div>
-            <div style="display:flex;flex-direction:column;gap:6px" id="bundle-sepsis">
-              <div style="padding:8px 12px;border-radius:6px;font-size:12px;background:var(--fond);color:var(--gris)">Activé si qSOFA ≥ 2</div>
-            </div>
+            <div id="bundle-sepsis"><div style="padding:8px 12px;border-radius:6px;font-size:12px;background:var(--fond);color:var(--gris)">Activé si qSOFA ≥ 2</div></div>
           </div>
-
-          <div style="margin-top:14px;font-size:11px;color:var(--gris);line-height:1.5">
-            Référence : Singer et al., <em>JAMA</em> 2016;315(8):801. Surviving Sepsis Campaign 2018.
-          </div>
+          <div style="margin-top:14px;font-size:11px;color:var(--gris);line-height:1.5">Référence : Singer et al., <em>JAMA</em> 2016;315(8):801.</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ===== PANEL HEART ===== -->
+  <!-- ===== HEART ===== -->
   <div class="panel" id="panel-heart">
     <div class="grid-2">
       <div class="card">
-        <div class="card-header">
-          <div class="card-icon" style="background:#fef2f2;">❤️‍🔥</div>
-          <div>
-            <h3>Critères HEART</h3>
-            <div class="subtitle">5 critères — risque de syndrome coronarien aigu</div>
-          </div>
-        </div>
+        <div class="card-header"><div class="card-icon" style="background:#fef2f2">❤️‍🔥</div><div><h3>Critères HEART</h3><div class="subtitle">5 critères — risque coronarien aigu</div></div></div>
         <div class="card-body">
-
           <div class="field">
             <div class="section-title">H — Histoire clinique</div>
             <div class="select-group">
-              <label class="select-opt" id="h0"><input type="radio" name="hh" value="0" checked onchange="calcHeart()"> <div class="select-opt-label">Peu suspecte<div class="select-opt-sub">Douleur non typique, peu de corrélation</div></div><div class="select-opt-score">0</div></label>
-              <label class="select-opt" id="h1"><input type="radio" name="hh" value="1" onchange="calcHeart()"> <div class="select-opt-label">Modérément suspecte<div class="select-opt-sub">1–2 éléments typiques (irradiation, effort...)</div></div><div class="select-opt-score">1</div></label>
-              <label class="select-opt" id="h2"><input type="radio" name="hh" value="2" onchange="calcHeart()"> <div class="select-opt-label">Très suspecte<div class="select-opt-sub">Douleur typique : serrement, irradiation bras/mâchoire, effort</div></div><div class="select-opt-score">2</div></label>
+              <label class="select-opt" id="h0"><input type="radio" name="hh" value="0" checked onchange="compute()"><div class="select-opt-label">Peu suspecte<div class="select-opt-sub">Douleur non typique</div></div><div class="select-opt-score">0</div></label>
+              <label class="select-opt" id="h1"><input type="radio" name="hh" value="1" onchange="compute()"><div class="select-opt-label">Modérément suspecte<div class="select-opt-sub">1–2 éléments typiques</div></div><div class="select-opt-score">1</div></label>
+              <label class="select-opt" id="h2"><input type="radio" name="hh" value="2" onchange="compute()"><div class="select-opt-label">Très suspecte<div class="select-opt-sub">Serrement, irradiation bras/mâchoire, effort</div></div><div class="select-opt-score">2</div></label>
             </div>
           </div>
-
           <div class="field">
             <div class="section-title">E — ECG</div>
             <div class="select-group">
-              <label class="select-opt" id="e0"><input type="radio" name="ee" value="0" checked onchange="calcHeart()"> <div class="select-opt-label">Normal</div><div class="select-opt-score">0</div></label>
-              <label class="select-opt" id="e1"><input type="radio" name="ee" value="1" onchange="calcHeart()"> <div class="select-opt-label">Non-spécifique<div class="select-opt-sub">BBG, HVG, repolarisation précoce, ancien changement</div></div><div class="select-opt-score">1</div></label>
-              <label class="select-opt" id="e2"><input type="radio" name="ee" value="2" onchange="calcHeart()"> <div class="select-opt-label">Ischémie significative<div class="select-opt-sub">Sus/sous-décalage ST, LBBB nouveau, onde T négative</div></div><div class="select-opt-score">2</div></label>
+              <label class="select-opt" id="e0"><input type="radio" name="ee" value="0" checked onchange="compute()"><div class="select-opt-label">Normal</div><div class="select-opt-score">0</div></label>
+              <label class="select-opt" id="e1"><input type="radio" name="ee" value="1" onchange="compute()"><div class="select-opt-label">Non-spécifique<div class="select-opt-sub">BBG, HVG, ancien changement</div></div><div class="select-opt-score">1</div></label>
+              <label class="select-opt" id="e2"><input type="radio" name="ee" value="2" onchange="compute()"><div class="select-opt-label">Ischémie significative<div class="select-opt-sub">Sus/sous-décalage ST, LBBB nouveau</div></div><div class="select-opt-score">2</div></label>
             </div>
           </div>
-
           <div class="field">
             <div class="section-title">A — Âge</div>
             <div class="select-group">
-              <label class="select-opt" id="a0"><input type="radio" name="aa" value="0" checked onchange="calcHeart()"> <div class="select-opt-label">< 45 ans</div><div class="select-opt-score">0</div></label>
-              <label class="select-opt" id="a1"><input type="radio" name="aa" value="1" onchange="calcHeart()"> <div class="select-opt-label">45–64 ans</div><div class="select-opt-score">1</div></label>
-              <label class="select-opt" id="a2"><input type="radio" name="aa" value="2" onchange="calcHeart()"> <div class="select-opt-label">≥ 65 ans</div><div class="select-opt-score">2</div></label>
+              <label class="select-opt" id="a0"><input type="radio" name="aa" value="0" checked onchange="compute()"><div class="select-opt-label">&lt; 45 ans</div><div class="select-opt-score">0</div></label>
+              <label class="select-opt" id="a1"><input type="radio" name="aa" value="1" onchange="compute()"><div class="select-opt-label">45–64 ans</div><div class="select-opt-score">1</div></label>
+              <label class="select-opt" id="a2"><input type="radio" name="aa" value="2" onchange="compute()"><div class="select-opt-label">≥ 65 ans</div><div class="select-opt-score">2</div></label>
             </div>
           </div>
-
           <div class="field">
             <div class="section-title">R — Facteurs de Risque</div>
             <div class="select-group">
-              <label class="select-opt" id="r0"><input type="radio" name="rr" value="0" checked onchange="calcHeart()"> <div class="select-opt-label">Aucun facteur connu</div><div class="select-opt-score">0</div></label>
-              <label class="select-opt" id="r1"><input type="radio" name="rr" value="1" onchange="calcHeart()"> <div class="select-opt-label">1–2 facteurs<div class="select-opt-sub">HTA, hypercholestérolémie, DT2, obésité, tabac, ATCD familial</div></div><div class="select-opt-score">1</div></label>
-              <label class="select-opt" id="r2"><input type="radio" name="rr" value="2" onchange="calcHeart()"> <div class="select-opt-label">≥ 3 facteurs ou ATCD coronarien<div class="select-opt-sub">IDM antérieur, stent, pontage, angioplastie</div></div><div class="select-opt-score">2</div></label>
+              <label class="select-opt" id="r0"><input type="radio" name="rr_" value="0" checked onchange="compute()"><div class="select-opt-label">Aucun facteur connu</div><div class="select-opt-score">0</div></label>
+              <label class="select-opt" id="r1"><input type="radio" name="rr_" value="1" onchange="compute()"><div class="select-opt-label">1–2 facteurs<div class="select-opt-sub">HTA, hypercholestérolémie, DT2, obésité, tabac</div></div><div class="select-opt-score">1</div></label>
+              <label class="select-opt" id="r2"><input type="radio" name="rr_" value="2" onchange="compute()"><div class="select-opt-label">≥ 3 facteurs ou ATCD coronarien</div><div class="select-opt-score">2</div></label>
             </div>
           </div>
-
           <div class="field">
             <div class="section-title">T — Troponine</div>
             <div class="select-group">
-              <label class="select-opt" id="t0"><input type="radio" name="tt" value="0" checked onchange="calcHeart()"> <div class="select-opt-label">Normale (≤ limite supérieure normale)</div><div class="select-opt-score">0</div></label>
-              <label class="select-opt" id="t1"><input type="radio" name="tt" value="1" onchange="calcHeart()"> <div class="select-opt-label">1–3× la limite supérieure normale</div><div class="select-opt-score">1</div></label>
-              <label class="select-opt" id="t2"><input type="radio" name="tt" value="2" onchange="calcHeart()"> <div class="select-opt-label">> 3× la limite supérieure normale</div><div class="select-opt-score">2</div></label>
+              <label class="select-opt" id="t0"><input type="radio" name="tt" value="0" checked onchange="compute()"><div class="select-opt-label">Normale</div><div class="select-opt-score">0</div></label>
+              <label class="select-opt" id="t1"><input type="radio" name="tt" value="1" onchange="compute()"><div class="select-opt-label">1–3× la limite supérieure</div><div class="select-opt-score">1</div></label>
+              <label class="select-opt" id="t2"><input type="radio" name="tt" value="2" onchange="compute()"><div class="select-opt-label">&gt; 3× la limite supérieure</div><div class="select-opt-score">2</div></label>
             </div>
           </div>
-
         </div>
       </div>
-
       <div class="card">
-        <div class="card-header">
-          <div class="card-icon" style="background:#fef2f2;">📈</div>
-          <div>
-            <h3>Résultat HEART</h3>
-            <div class="subtitle">Six et al., Netherlands Heart Journal 2010</div>
-          </div>
-        </div>
+        <div class="card-header"><div class="card-icon" style="background:#fef2f2">📈</div><div><h3>Résultat HEART</h3><div class="subtitle">Six et al., Netherlands Heart Journal 2010</div></div></div>
         <div class="card-body">
           <div class="result-box gris" id="heart-result">
             <div class="result-score-row">
               <div class="result-score-num" id="heart-score">0</div>
-              <div>
-                <div class="result-score-max">/10</div>
-                <div class="result-score-label">Score HEART</div>
-              </div>
+              <div><div style="font-size:15px;font-weight:600;color:var(--gris)">/10</div><div style="font-size:13px;color:var(--gris)">Score HEART</div></div>
             </div>
             <div class="gauge-bar"><div class="gauge-fill" id="heart-gauge" style="width:0%;background:#e2e8f0"></div></div>
             <div class="result-alert" id="heart-alert">Renseignez les critères</div>
             <div class="result-mortalite" id="heart-mace"></div>
-            <div class="result-cta" id="heart-cta">Les actions recommandées apparaîtront ici.</div>
+            <div class="result-cta" id="heart-cta">—</div>
           </div>
-
           <div style="margin-top:16px">
             <div class="section-title">Risque MACE à 6 semaines</div>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-              <div style="padding:10px;border-radius:8px;text-align:center;background:var(--vert-bg);border:1px solid var(--vert)">
-                <div style="font-size:18px;font-weight:800;color:var(--vert)">~2%</div>
-                <div style="font-size:11px;color:var(--vert);font-weight:600">Score 0–3</div>
-              </div>
-              <div style="padding:10px;border-radius:8px;text-align:center;background:var(--orange-bg);border:1px solid var(--orange)">
-                <div style="font-size:18px;font-weight:800;color:var(--orange)">~12%</div>
-                <div style="font-size:11px;color:var(--orange);font-weight:600">Score 4–6</div>
-              </div>
-              <div style="padding:10px;border-radius:8px;text-align:center;background:var(--rouge-bg);border:1px solid var(--rouge)">
-                <div style="font-size:18px;font-weight:800;color:var(--rouge)">~65%</div>
-                <div style="font-size:11px;color:var(--rouge);font-weight:600">Score 7–10</div>
-              </div>
+              <div style="padding:10px;border-radius:8px;text-align:center;background:var(--vert-bg);border:1px solid var(--vert)"><div style="font-size:18px;font-weight:800;color:var(--vert)">~2%</div><div style="font-size:11px;color:var(--vert);font-weight:600">Score 0–3</div></div>
+              <div style="padding:10px;border-radius:8px;text-align:center;background:var(--orange-bg);border:1px solid var(--orange)"><div style="font-size:18px;font-weight:800;color:var(--orange)">~12%</div><div style="font-size:11px;color:var(--orange);font-weight:600">Score 4–6</div></div>
+              <div style="padding:10px;border-radius:8px;text-align:center;background:var(--rouge-bg);border:1px solid var(--rouge)"><div style="font-size:18px;font-weight:800;color:var(--rouge)">~65%</div><div style="font-size:11px;color:var(--rouge);font-weight:600">Score 7–10</div></div>
             </div>
           </div>
-
-          <div style="margin-top:14px;font-size:11px;color:var(--gris);line-height:1.5">
-            MACE = Major Adverse Cardiac Events (IDM, revascularisation urgente, décès cardio).<br>
-            Référence : Six et al., <em>Netherlands Heart Journal</em> 2010;18(3):121-126.
-          </div>
+          <div style="margin-top:14px;font-size:11px;color:var(--gris);line-height:1.5">MACE = IDM, revascularisation urgente, décès cardio.<br>Référence : Six et al., <em>Netherlands Heart Journal</em> 2010;18(3):121.</div>
         </div>
       </div>
     </div>
   </div>
 
-</div><!-- /main -->
+</div>
 
 <script>
-// ==================== UTILITAIRES ====================
-let o2Val = 0, confVal = 0;
+// ============================================================
+// SCORING ENGINE — pure functions, no DOM dependency
+// Mirrors the formal Aether source (@invariant, @example)
+// ============================================================
 
-function showTab(name) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
-  document.getElementById('tab-' + name).classList.add('active');
-}
+const Engine = {
 
-function syncSlider(el, lblId) {
-  const min = +el.min, max = +el.max, val = +el.value;
-  const pct = ((val - min) / (max - min) * 100).toFixed(1);
-  el.style.setProperty('--pct', pct + '%');
-  document.getElementById(lblId).textContent = val;
-}
+  news2(rr, spo2, o2, fc, ta, avpu, temp) {
+    const sRR   = rr<=8?3 : rr<=11?1 : rr<=20?0 : rr<=24?2 : 3;
+    const sSPO2 = o2===1
+      ? (spo2<=83?3 : spo2<=85?2 : spo2<=87?1 : spo2<=92?0 : spo2<=94?1 : spo2<=96?2 : 3)
+      : (spo2<=91?3 : spo2<=93?2 : spo2<=95?1 : 0);
+    const sTA   = ta<=90?3 : ta<=100?2 : ta<=110?1 : ta<=219?0 : 3;
+    const sFC   = fc<=40?3 : fc<=50?1 : fc<=90?0 : fc<=110?1 : fc<=130?2 : 3;
+    const sTemp = temp<=35.0?3 : temp<=36.0?1 : temp<=38.0?0 : temp<=39.0?1 : 2;
+    const sO2   = o2*2;
+    const sAVPU = avpu*3;
+    const total = sRR+sSPO2+sTA+sFC+sTemp+sO2+sAVPU;
+    // invariant: 0 <= total <= 20
+    return { total, parts:{ sRR, sSPO2, sTA, sFC, sTemp, sO2, sAVPU },
+      params:{ rr, spo2, o2, fc, ta, avpu, temp } };
+  },
 
-function syncTemp(el) {
-  const val = +el.value / 10;
-  const pct = ((+el.value - +el.min) / (+el.max - +el.min) * 100).toFixed(1);
-  el.style.setProperty('--pct', pct + '%');
-  document.getElementById('lbl-temp').textContent = val.toFixed(1);
-}
+  qsofa(rr, conf, ta) {
+    const c1 = rr>=22?1:0, c2 = conf, c3 = ta<=100?1:0;
+    return { total:c1+c2+c3, parts:{c1,c2,c3}, params:{rr,conf,ta} };
+  },
 
-function setO2(v) {
-  o2Val = v;
-  document.getElementById('o2-non').classList.toggle('active', v === 0);
-  document.getElementById('o2-oui').classList.toggle('active', v === 1);
-  calcNews2();
-}
+  heart(h, e, a, r, t) {
+    const total = h+e+a+r+t;
+    return { total, parts:{h,e,a,r,t} };
+  },
 
-function setConf(v) {
-  confVal = v;
-  document.getElementById('conf-non').classList.toggle('active', v === 0);
-  document.getElementById('conf-oui').classList.toggle('active', v === 1);
-  calcQsofa();
-}
+  triage(n2, qs, ht) {
+    const reasons = [];
+    if (n2>=7) reasons.push('NEWS2='+n2+' ≥ 7');
+    if (qs>=2) reasons.push('qSOFA='+qs+' ≥ 2');
+    if (ht>=7) reasons.push('HEART='+ht+' ≥ 7');
+    if (reasons.length) return { level:'CRITIQUE', reasons };
+    if (n2>=5) reasons.push('NEWS2='+n2+' ≥ 5');
+    if (qs===1) reasons.push('qSOFA='+qs+' = 1');
+    if (ht>=4) reasons.push('HEART='+ht+' ≥ 4');
+    if (reasons.length) return { level:'URGENT', reasons };
+    if (n2>=1) reasons.push('NEWS2='+n2+' ≥ 1');
+    if (ht>=1) reasons.push('HEART='+ht+' ≥ 1');
+    if (reasons.length) return { level:'SEMI', reasons };
+    return { level:'STABLE', reasons:['Tous les scores dans les limites normales'] };
+  },
+
+  auditLog(n2res, qsres, htres, triage) {
+    const lines = [];
+    lines.push({ type:'title', text:'NEWS2 — '+n2res.total+'/20' });
+    const p = n2res.parts, q = n2res.params;
+    lines.push({ type:'param', text:`  FR=${q.rr}/min → +${p.sRR}` + (p.sRR>0?' ⚠':'') });
+    lines.push({ type:'param', text:`  SpO2=${q.spo2}% → +${p.sSPO2}` + (p.sSPO2>0?' ⚠':'') });
+    lines.push({ type:'param', text:`  TA sys=${q.ta}mmHg → +${p.sTA}` + (p.sTA>0?' ⚠':'') });
+    lines.push({ type:'param', text:`  FC=${q.fc}bpm → +${p.sFC}` + (p.sFC>0?' ⚠':'') });
+    lines.push({ type:'param', text:`  Temp=${q.temp.toFixed(1)}°C → +${p.sTemp}` + (p.sTemp>0?' ⚠':'') });
+    if (q.o2) lines.push({ type:'param', text:`  O2 supplémentaire → +${p.sO2} ⚠` });
+    if (q.avpu) lines.push({ type:'warn', text:`  AVPU anormal → +${p.sAVPU} ⚠⚠` });
+    lines.push({ type:'total', text:`  TOTAL NEWS2 = ${n2res.total}` });
+    lines.push({ type:'title', text:'qSOFA — '+qsres.total+'/3' });
+    const c = qsres.parts, qp = qsres.params;
+    lines.push({ type:'param', text:`  FR≥22 (${qp.rr}) → ${c.c1}` + (c.c1?' ⚠':'') });
+    lines.push({ type:'param', text:`  Confusion → ${c.c2}` + (c.c2?' ⚠':'') });
+    lines.push({ type:'param', text:`  TA≤100 (${qp.ta}) → ${c.c3}` + (c.c3?' ⚠':'') });
+    lines.push({ type:'total', text:`  TOTAL qSOFA = ${qsres.total}` });
+    lines.push({ type:'title', text:'HEART — '+htres.total+'/10' });
+    const hp = htres.parts;
+    lines.push({ type:'param', text:`  Histoire=${hp.h}  ECG=${hp.e}  Âge=${hp.a}  Risque=${hp.r}  Troponine=${hp.t}` });
+    lines.push({ type:'total', text:`  TOTAL HEART = ${htres.total}` });
+    lines.push({ type:'title', text:'TRIAGE → '+triage.level });
+    lines.push({ type:'param', text:`  Raison : ${triage.reasons.join(' + ')}` });
+    return lines;
+  }
+};
+
+// ============================================================
+// STATE
+// ============================================================
+let o2Val=0, confVal=0;
 
 function getRadio(name) {
   const el = document.querySelector(`input[name="${name}"]:checked`);
   return el ? +el.value : 0;
 }
 
-function setSelectActive(name, val) {
-  // highlight select-opt
+function readInputs() {
+  return {
+    rr:   +document.getElementById('rr').value,
+    spo2: +document.getElementById('spo2').value,
+    o2:   o2Val,
+    fc:   +document.getElementById('fc').value,
+    ta:   +document.getElementById('ta').value,
+    avpu: getRadio('avpu'),
+    temp: +document.getElementById('temp').value / 10,
+    qrr:  +document.getElementById('qrr').value,
+    qta:  +document.getElementById('qta').value,
+    conf: confVal,
+    h: getRadio('hh'), e: getRadio('ee'), a: getRadio('aa'),
+    r: getRadio('rr_'), t: getRadio('tt')
+  };
 }
 
-// ==================== NEWS2 ====================
-function calcNews2() {
-  const rr   = +document.getElementById('rr').value;
-  const spo2 = +document.getElementById('spo2').value;
-  const ta   = +document.getElementById('ta').value;
-  const fc   = +document.getElementById('fc').value;
-  const temp = +document.getElementById('temp').value / 10;
-  const avpu = getRadio('avpu');
+// ============================================================
+// MAIN COMPUTE — calls Engine, then renders
+// ============================================================
+function compute() {
+  const i = readInputs();
+  const n2  = Engine.news2(i.rr, i.spo2, i.o2, i.fc, i.ta, i.avpu, i.temp);
+  const qs  = Engine.qsofa(i.qrr, i.conf, i.qta);
+  const ht  = Engine.heart(i.h, i.e, i.a, i.r, i.t);
+  const tri = Engine.triage(n2.total, qs.total, ht.total);
+  const log = Engine.auditLog(n2, qs, ht, tri);
 
-  // Score sous-paramètres
-  const sRR   = rr<=8?3 : rr<=11?1 : rr<=20?0 : rr<=24?2 : 3;
-  let sSPO2;
-  if (o2Val===1) {
-    sSPO2 = spo2<=83?3 : spo2<=85?2 : spo2<=87?1 : spo2<=92?0 : spo2<=94?1 : spo2<=96?2 : 3;
-  } else {
-    sSPO2 = spo2<=91?3 : spo2<=93?2 : spo2<=95?1 : 0;
-  }
-  const sTA   = ta<=90?3 : ta<=100?2 : ta<=110?1 : ta<=219?0 : 3;
-  const sFC   = fc<=40?3 : fc<=50?1 : fc<=90?0 : fc<=110?1 : fc<=130?2 : 3;
-  const sTemp = temp<=35.0?3 : temp<=36.0?1 : temp<=38.0?0 : temp<=39.0?1 : 2;
-  const sO2   = o2Val * 2;
+  renderNews2(n2);
+  renderQsofa(qs);
+  renderHeart(ht);
+  renderTriage(tri, n2.total, qs.total, ht.total);
+  renderAuditLog(log);
 
-  const score = sRR + sSPO2 + sTA + sFC + sTemp + (avpu*3) + sO2;
-
-  let niveau, alerte, cta, couleur;
-  if (score <= 4) {
-    couleur = 'vert'; alerte = '🟢 Surveillance standard';
-    cta = 'Surveillance toutes les 12h minimum. Réévaluation au moindre changement.';
-  } else if (score <= 6) {
-    couleur = 'orange'; alerte = '🟠 Surveillance rapprochée';
-    cta = 'Appel du médecin dans l\'heure. Surveillance toutes les 1–2h. Monitoring continu recommandé.';
-  } else {
-    couleur = 'rouge'; alerte = '🔴 URGENCE — Évaluation immédiate';
-    cta = 'Appel médical immédiat. Envisager transfert en soins intensifs. Monitoring continu. Réévaluation toutes les 30 min.';
-  }
-
-  document.getElementById('news2-score').textContent = score;
-  document.getElementById('news2-alert').textContent = alerte;
-  document.getElementById('news2-cta').textContent = cta;
-  document.getElementById('news2-gauge').style.width = (score/20*100) + '%';
-  document.getElementById('news2-gauge').style.background = couleur==='vert'?'var(--vert)':couleur==='orange'?'var(--orange)':'var(--rouge)';
-  const rb = document.getElementById('news2-result');
-  rb.className = 'result-box ' + couleur;
-  document.getElementById('badge-news2').textContent = score;
-
-  // Highlight AVPU
-  document.getElementById('avpu-a').classList.toggle('active', avpu===0);
-  document.getElementById('avpu-v').classList.toggle('active', avpu===1);
-
-  updateTriage();
-}
-
-// ==================== qSOFA ====================
-function calcQsofa() {
-  const rr  = +document.getElementById('qrr').value;
-  const ta  = +document.getElementById('qta').value;
-  const c1  = rr >= 22 ? 1 : 0;
-  const c2  = confVal;
-  const c3  = ta <= 100 ? 1 : 0;
-  const score = c1 + c2 + c3;
-
-  const criteres = [];
-  if (c1) criteres.push('FR ≥ 22 (' + rr + ')');
-  if (c2) criteres.push('Confusion / GCS < 15');
-  if (c3) criteres.push('TA sys ≤ 100 (' + ta + ' mmHg)');
-  document.getElementById('qsofa-criteres').textContent = criteres.length ? criteres.join(' • ') : 'Aucun critère actif';
-
-  let niveau, alerte, cta, couleur, mortalite;
-  if (score === 0) {
-    couleur='vert'; alerte='🟢 Risque faible de sepsis'; mortalite='Mortalité estimée ~3%';
-    cta = 'Surveillance habituelle. Traitement de l\'infection identifiée. Réévaluer si aggravation.';
-  } else if (score === 1) {
-    couleur='orange'; alerte='🟠 Surveillance — 1 critère présent'; mortalite='Mortalité estimée ~6%';
-    cta = 'Bilan biologique : NFS, CRP, créatinine. Hémocultures si fièvre. Réévaluation dans 1h.';
-  } else {
-    couleur='rouge'; alerte='🔴 ALERTE SEPSIS — Bundle 1h URGENT'; mortalite='Mortalité estimée ' + (score===2?'~22%':'~36%');
-    cta = 'Déclencher le Bundle Sepsis 1 heure immédiatement.';
-  }
-
-  document.getElementById('qsofa-score').textContent = score;
-  document.getElementById('qsofa-alert').textContent = alerte;
-  document.getElementById('qsofa-cta').textContent = cta;
-  document.getElementById('qsofa-gauge').style.width = (score/3*100) + '%';
-  document.getElementById('qsofa-gauge').style.background = couleur==='vert'?'var(--vert)':couleur==='orange'?'var(--orange)':'var(--rouge)';
-  document.getElementById('qsofa-result').className = 'result-box ' + couleur;
-  const mEl = document.getElementById('qsofa-mortalite');
-  mEl.textContent = mortalite; mEl.style.display = 'block';
-  document.getElementById('badge-qsofa').textContent = score;
-
-  const bundle = document.getElementById('bundle-sepsis');
-  if (score >= 2) {
-    bundle.innerHTML = [
-      '🩸 Hémocultures (2 paires) avant antibiothérapie',
-      '💊 Antibiothérapie large spectre dans l\'heure',
-      '💧 Remplissage 30 mL/kg cristalloïdes si hypotension / lactates ≥ 4',
-      '🧪 Dosage des lactates artériels',
-      '📊 Scope continu — TA, SpO₂, FC, diurèse'
-    ].map(t => `<div style="padding:7px 10px;background:var(--rouge-bg);border-radius:6px;font-size:12px;font-weight:500;color:var(--rouge)">${t}</div>`).join('');
-  } else {
-    bundle.innerHTML = '<div style="padding:8px 12px;border-radius:6px;font-size:12px;background:var(--fond);color:var(--gris)">Activé si qSOFA ≥ 2</div>';
-  }
-
-  updateTriage();
-}
-
-// ==================== HEART ====================
-function calcHeart() {
-  const h = getRadio('hh'), e = getRadio('ee'), a = getRadio('aa');
-  const r = getRadio('rr'), t = getRadio('tt');
-  const score = h + e + a + r + t;
-
-  // Highlight radio opts
-  ['h','e','a','r','t'].forEach(k => {
-    const map = {h:'hh',e:'ee',a:'aa',r:'rr',t:'tt'};
-    [0,1,2].forEach(v => {
-      const el = document.getElementById(k+v);
-      if (el) el.classList.toggle('active', getRadio(map[k])===v);
-    });
-  });
-
-  let alerte, cta, couleur, mace;
-  if (score <= 3) {
-    couleur='vert'; alerte='🟢 Faible risque coronarien'; mace='~2% MACE à 6 semaines';
-    cta = 'Sortie possible après observation. ECG + troponine unique. Consultation cardiologique dans les 72h.';
-  } else if (score <= 6) {
-    couleur='orange'; alerte='🟠 Risque modéré'; mace='~12% MACE à 6 semaines';
-    cta = 'Observation 12–24h. Troponines sérielles H0/H3/H6. Cardiologue de garde. Scope continu.';
-  } else {
-    couleur='rouge'; alerte='🔴 Risque élevé — Coronarographie urgente'; mace='~65% MACE à 6 semaines';
-    cta = 'ECG + troponine en urgence. Aspirine 250 mg IV. Appel cardiologue de garde. Coronarographie si indiquée.';
-  }
-
-  document.getElementById('heart-score').textContent = score;
-  document.getElementById('heart-alert').textContent = alerte;
-  document.getElementById('heart-cta').textContent = cta;
-  document.getElementById('heart-mace').textContent = mace;
-  document.getElementById('heart-gauge').style.width = (score/10*100) + '%';
-  document.getElementById('heart-gauge').style.background = couleur==='vert'?'var(--vert)':couleur==='orange'?'var(--orange)':'var(--rouge)';
-  document.getElementById('heart-result').className = 'result-box ' + couleur;
-  document.getElementById('badge-heart').textContent = score;
-
-  updateTriage();
-}
-
-// ==================== TRIAGE GLOBAL ====================
-function updateTriage() {
-  const news2 = +document.getElementById('news2-score').textContent || 0;
-  const qsofa = +document.getElementById('qsofa-score').textContent || 0;
-  const heart = +document.getElementById('heart-score').textContent || 0;
-
-  document.getElementById('recap-news2').textContent = news2;
-  document.getElementById('recap-qsofa').textContent = qsofa;
-  document.getElementById('recap-heart').textContent = heart;
-
-  // Couleurs recap
-  function setRecap(id, score, threshOrange, threshRouge) {
-    const el = document.getElementById(id);
-    if (score >= threshRouge) { el.style.background='var(--rouge-bg)'; el.style.color='var(--rouge)'; }
-    else if (score >= threshOrange) { el.style.background='var(--orange-bg)'; el.style.color='var(--orange)'; }
-    else { el.style.background='var(--vert-bg)'; el.style.color='var(--vert)'; }
-  }
-  function setRecapTxt(id, txt, score, to, tr) {
-    const el = document.getElementById(id);
-    el.textContent = txt;
-    if (score >= tr) { el.style.background='var(--rouge-bg)'; el.style.color='var(--rouge)'; }
-    else if (score >= to) { el.style.background='var(--orange-bg)'; el.style.color='var(--orange)'; }
-    else { el.style.background='var(--vert-bg)'; el.style.color='var(--vert)'; }
-  }
-
-  setRecapTxt('recap-news2-alerte', news2<=4?'VERT':news2<=6?'ORANGE':'ROUGE', news2, 5, 7);
-  setRecapTxt('recap-qsofa-alerte', qsofa===0?'NEG':qsofa===1?'SURV':'SEPSIS', qsofa, 1, 2);
-  setRecapTxt('recap-heart-alerte', heart<=3?'FAIBLE':heart<=6?'MODÉRÉ':'ÉLEVÉ', heart, 4, 7);
-
-  // Niveau global
-  let niveau, sub, cls, actions;
-  if (news2 >= 7 || qsofa >= 2 || heart >= 7) {
-    niveau = '🔴 CRITIQUE'; sub = 'Intervention médicale immédiate requise'; cls = 'CRITIQUE';
-    actions = genActions('CRITIQUE', news2, qsofa, heart);
-  } else if (news2 >= 5 || qsofa === 1 || heart >= 4) {
-    niveau = '🟠 URGENT'; sub = 'Évaluation médicale dans les 30 minutes'; cls = 'URGENT';
-    actions = genActions('URGENT', news2, qsofa, heart);
-  } else if (news2 >= 1 || heart >= 1) {
-    niveau = '🟡 SEMI-URGENT'; sub = 'Surveillance renforcée — réévaluation dans l\'heure'; cls = 'SEMI';
-    actions = genActions('SEMI', news2, qsofa, heart);
-  } else {
-    niveau = '🟢 STABLE'; sub = 'Surveillance standard. Réévaluer au moindre changement.'; cls = 'STABLE';
-    actions = genActions('STABLE', news2, qsofa, heart);
-  }
-
-  document.getElementById('triage-niveau').textContent = niveau;
-  document.getElementById('triage-sub').textContent = sub;
-  const hdr = document.getElementById('triage-header-box');
-  hdr.className = 'triage-header ' + cls;
-
-  document.getElementById('actions-list').innerHTML = actions;
   document.getElementById('datetime-eval').textContent = new Date().toLocaleString('fr-FR');
 }
 
-function genActions(niveau, n, q, h) {
-  const acts = [];
-  if (niveau === 'CRITIQUE') {
-    acts.push(['Appel médical immédiat', 'Alerter le médecin senior et/ou réanimateur de garde']);
-    if (q >= 2) acts.push(['Bundle Sepsis 1h', 'Hémocultures → ATB large spectre → remplissage → lactates']);
-    if (h >= 7) acts.push(['Cardiologue de garde', 'ECG 18 dérivations + troponine STAT + aspirine 250mg IV']);
-    if (n >= 7) acts.push(['Monitoring continu', 'Scope, SpO₂, TA, FC, diurèse — réévaluation toutes les 30 min']);
-    acts.push(['Envisager transfert USI/Réa', 'Selon évolution et disponibilité des lits de soins intensifs']);
-  } else if (niveau === 'URGENT') {
-    acts.push(['Appel médecin dans l\'heure', 'Informer le médecin responsable du secteur']);
-    if (q === 1) acts.push(['Bilan biologique', 'NFS, CRP, créatinine, hémocultures si fièvre']);
-    if (h >= 4) acts.push(['Troponines sérielles', 'Dosage H0, H3 et H6 — cardiologue si positive']);
-    acts.push(['Surveillance rapprochée', 'Paramètres toutes les 1–2h, réévaluation clinique']);
-  } else if (niveau === 'SEMI') {
-    acts.push(['Surveillance renforcée', 'Paramètres vitaux toutes les 4–6h']);
-    acts.push(['Réévaluation clinique', 'Dans l\'heure par l\'infirmier(e) référent(e)']);
-  } else {
-    acts.push(['Surveillance standard', 'Paramètres toutes les 12h']);
-    acts.push(['Réévaluer si changement', 'Tout symptôme nouveau doit déclencher une réévaluation']);
-  }
+// ============================================================
+// RENDERERS
+// ============================================================
+function couleurN2(s) { return s<=4?'vert':s<=6?'orange':'rouge'; }
+function couleurQ(s)  { return s===0?'vert':s===1?'orange':'rouge'; }
+function couleurH(s)  { return s<=3?'vert':s<=6?'orange':'rouge'; }
+function cssColor(c)  { return c==='vert'?'var(--vert)':c==='orange'?'var(--orange)':'var(--rouge)'; }
 
-  return acts.map((a, i) => `
-    <div class="action-item">
-      <div class="action-num">${i+1}</div>
-      <div class="action-text"><strong>${a[0]}</strong>${a[1]}</div>
-    </div>`).join('');
+function renderNews2(r) {
+  const s = r.total; const c = couleurN2(s);
+  const alerte = s<=4?'🟢 Surveillance standard':s<=6?'🟠 Surveillance rapprochée':'🔴 URGENCE — Évaluation immédiate';
+  const cta = s<=4?'Surveillance toutes les 12h. Réévaluation au moindre changement.'
+    :s<=6?'Appel médecin dans l\'heure. Surveillance toutes les 1–2h.'
+    :'Appel médical immédiat. Envisager transfert soins intensifs. Monitoring continu.';
+  document.getElementById('news2-score').textContent = s;
+  document.getElementById('news2-alert').textContent = alerte;
+  document.getElementById('news2-cta').textContent = cta;
+  document.getElementById('news2-gauge').style.cssText = `width:${s/20*100}%;background:${cssColor(c)}`;
+  document.getElementById('news2-result').className = 'result-box '+c;
+  document.getElementById('badge-news2').textContent = s;
+  document.getElementById('avpu-a').classList.toggle('active', r.params.avpu===0);
+  document.getElementById('avpu-v').classList.toggle('active', r.params.avpu===1);
 }
 
-// ==================== HORLOGE ====================
-function updateClock() {
-  document.getElementById('horloge').textContent = new Date().toLocaleTimeString('fr-FR');
+function renderQsofa(r) {
+  const s = r.total; const c = couleurQ(s);
+  const alerte = s===0?'🟢 Risque faible de sepsis':s===1?'🟠 Surveillance — 1 critère':'🔴 ALERTE SEPSIS — Bundle 1h URGENT';
+  const mort = s===0?'~3%':s===1?'~6%':s===2?'~22%':'~36%';
+  const cta = s===0?'Surveillance habituelle. Traitement de l\'infection.':
+    s===1?'Bilan biologique : NFS, CRP, hémocultures si fièvre.':
+    'Déclencher le Bundle Sepsis 1 heure immédiatement.';
+  const criteres = [];
+  if (r.parts.c1) criteres.push('FR ≥ 22 ('+r.params.rr+')');
+  if (r.parts.c2) criteres.push('Confusion / GCS < 15');
+  if (r.parts.c3) criteres.push('TA sys ≤ 100 ('+r.params.ta+' mmHg)');
+  document.getElementById('qsofa-criteres').textContent = criteres.length ? criteres.join(' • ') : 'Aucun critère actif';
+  document.getElementById('qsofa-score').textContent = s;
+  document.getElementById('qsofa-alert').textContent = alerte;
+  document.getElementById('qsofa-cta').textContent = cta;
+  document.getElementById('qsofa-gauge').style.cssText = `width:${s/3*100}%;background:${cssColor(c)}`;
+  document.getElementById('qsofa-result').className = 'result-box '+c;
+  const mEl = document.getElementById('qsofa-mortalite');
+  mEl.textContent = 'Mortalité estimée '+mort; mEl.style.display='block';
+  document.getElementById('badge-qsofa').textContent = s;
+  const bundle = document.getElementById('bundle-sepsis');
+  bundle.innerHTML = s>=2
+    ? ['🩸 Hémocultures (2 paires) avant ATB','💊 Antibiothérapie large spectre dans l\'heure','💧 Remplissage 30mL/kg cristalloïdes si hypotension','🧪 Dosage des lactates artériels','📊 Scope continu — TA, SpO₂, FC, diurèse']
+        .map(t=>`<div style="padding:7px 10px;background:var(--rouge-bg);border-radius:6px;font-size:12px;font-weight:500;color:var(--rouge);margin-bottom:4px">${t}</div>`).join('')
+    : '<div style="padding:8px 12px;border-radius:6px;font-size:12px;background:var(--fond);color:var(--gris)">Activé si qSOFA ≥ 2</div>';
 }
-setInterval(updateClock, 1000);
-updateClock();
 
-// ==================== INIT ====================
-document.addEventListener('DOMContentLoaded', () => {
-  // Init sliders
-  ['rr','spo2','ta','fc','qrr','qta'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) syncSlider(el, 'lbl-' + id);
+function renderHeart(r) {
+  const s = r.total; const c = couleurH(s);
+  const alerte = s<=3?'🟢 Faible risque coronarien':s<=6?'🟠 Risque modéré':'🔴 Risque élevé — Coronarographie urgente';
+  const mace = s<=3?'~2% MACE à 6 semaines':s<=6?'~12% MACE à 6 semaines':'~65% MACE à 6 semaines';
+  const cta = s<=3?'Sortie possible. ECG + troponine unique. Cardio dans 72h.'
+    :s<=6?'Observation 12–24h. Troponines H0/H3/H6. Cardiologue de garde.'
+    :'ECG + troponine STAT. Aspirine 250mg IV. Cardiologue URGENCE. Coro si indiquée.';
+  document.getElementById('heart-score').textContent = s;
+  document.getElementById('heart-alert').textContent = alerte;
+  document.getElementById('heart-cta').textContent = cta;
+  document.getElementById('heart-mace').textContent = mace;
+  document.getElementById('heart-gauge').style.cssText = `width:${s/10*100}%;background:${cssColor(c)}`;
+  document.getElementById('heart-result').className = 'result-box '+c;
+  document.getElementById('badge-heart').textContent = s;
+  ['h','e','a','r','t'].forEach(k=>{
+    const map={h:'hh',e:'ee',a:'aa',r:'rr_',t:'tt'};
+    [0,1,2].forEach(v=>{ const el=document.getElementById(k+v); if(el) el.classList.toggle('active', getRadio(map[k])===v); });
   });
+}
+
+function renderTriage(tri, n2, qs, ht) {
+  const map = {
+    CRITIQUE:{ emoji:'🔴 CRITIQUE', sub:'Intervention médicale immédiate requise', cls:'CRITIQUE' },
+    URGENT:  { emoji:'🟠 URGENT',   sub:'Évaluation médicale dans les 30 minutes', cls:'URGENT'   },
+    SEMI:    { emoji:'🟡 SEMI-URGENT', sub:'Surveillance renforcée — réévaluation dans l\'heure', cls:'SEMI' },
+    STABLE:  { emoji:'🟢 STABLE',   sub:'Surveillance standard. Réévaluer au moindre changement.', cls:'STABLE' }
+  };
+  const m = map[tri.level];
+  document.getElementById('triage-niveau').textContent = m.emoji;
+  document.getElementById('triage-sub').textContent = m.sub;
+  document.getElementById('triage-header-box').className = 'triage-header '+m.cls;
+
+  const expl = document.getElementById('triage-explication');
+  expl.textContent = 'Pourquoi ? → ' + tri.reasons.join(' + ');
+  expl.style.display = 'inline-block';
+
+  // Recap scores
+  const setMini = (id, alId, val, label, to, tr) => {
+    document.getElementById(id).textContent = val;
+    const el = document.getElementById(alId); el.textContent = label;
+    if (val>=tr) { el.style.background='var(--rouge-bg)'; el.style.color='var(--rouge)'; }
+    else if (val>=to) { el.style.background='var(--orange-bg)'; el.style.color='var(--orange)'; }
+    else { el.style.background='var(--vert-bg)'; el.style.color='var(--vert)'; }
+  };
+  setMini('recap-news2','recap-news2-alerte', n2, n2<=4?'VERT':n2<=6?'ORANGE':'ROUGE', 5, 7);
+  setMini('recap-qsofa','recap-qsofa-alerte', qs, qs===0?'NEG':qs===1?'SURV':'SEPSIS', 1, 2);
+  setMini('recap-heart','recap-heart-alerte', ht, ht<=3?'FAIBLE':ht<=6?'MODÉRÉ':'ÉLEVÉ', 4, 7);
+
+  // Actions
+  const acts = [];
+  if (tri.level==='CRITIQUE') {
+    acts.push(['Appel médical immédiat','Alerter le médecin senior et/ou réanimateur de garde']);
+    if (qs>=2) acts.push(['Bundle Sepsis 1h','Hémocultures → ATB → remplissage → lactates']);
+    if (ht>=7) acts.push(['Cardiologue de garde','ECG 18 dérivations + troponine STAT + aspirine 250mg IV']);
+    if (n2>=7) acts.push(['Monitoring continu','Scope, SpO₂, TA, FC, diurèse — réévaluation toutes les 30 min']);
+    acts.push(['Envisager transfert USI/Réa','Selon évolution et disponibilité des lits de soins intensifs']);
+  } else if (tri.level==='URGENT') {
+    acts.push(['Appel médecin dans l\'heure','Informer le médecin responsable du secteur']);
+    if (qs===1) acts.push(['Bilan biologique','NFS, CRP, créatinine, hémocultures si fièvre']);
+    if (ht>=4) acts.push(['Troponines sérielles','Dosage H0, H3 et H6 — cardiologue si positive']);
+    acts.push(['Surveillance rapprochée','Paramètres toutes les 1–2h']);
+  } else if (tri.level==='SEMI') {
+    acts.push(['Surveillance renforcée','Paramètres vitaux toutes les 4–6h']);
+    acts.push(['Réévaluation clinique','Dans l\'heure par l\'infirmier(e) référent(e)']);
+  } else {
+    acts.push(['Surveillance standard','Paramètres toutes les 12h']);
+    acts.push(['Réévaluer si changement','Tout symptôme nouveau déclenche une réévaluation']);
+  }
+  document.getElementById('actions-list').innerHTML = acts.map((a,i)=>
+    `<div class="action-item"><div class="action-num">${i+1}</div><div class="action-text"><strong>${a[0]}</strong>${a[1]}</div></div>`).join('');
+}
+
+function renderAuditLog(lines) {
+  const html = lines.map(l => {
+    if (l.type==='title')  return `<div class="log-score">${l.text}</div>`;
+    if (l.type==='total')  return `<div class="log-total">${l.text}</div>`;
+    if (l.type==='warn')   return `<div class="log-warn">${l.text}</div>`;
+    return `<div class="log-param">${l.text}</div>`;
+  }).join('');
+  document.getElementById('audit-log').innerHTML = `<div class="log-title">// MedTriage Audit Log — ${new Date().toLocaleTimeString('fr-FR')}</div>` + html;
+}
+
+// ============================================================
+// SIMULATIONS
+// ============================================================
+const SIMULATIONS = {
+  sepsis: { rr:26,spo2:93,o2:1,fc:118,ta:88,avpu:1,temp:39.2, qrr:26,qta:88,conf:1, h:0,e:0,a:1,r:1,t:1 },
+  acs:    { rr:16,spo2:97,o2:0,fc:92, ta:128,avpu:0,temp:37.1, qrr:16,qta:128,conf:0, h:2,e:2,a:2,r:2,t:2 },
+  resp:   { rr:30,spo2:88,o2:1,fc:115,ta:95,avpu:0,temp:38.6, qrr:30,qta:95,conf:0, h:0,e:0,a:0,r:0,t:0 },
+  stable: { rr:14,spo2:98,o2:0,fc:72, ta:125,avpu:0,temp:37.0, qrr:14,qta:125,conf:0, h:0,e:0,a:0,r:0,t:0 }
+};
+
+function simulate(cas) {
+  const s = SIMULATIONS[cas];
+  setSlider('rr', s.rr, 'lbl-rr');
+  setSlider('spo2', s.spo2, 'lbl-spo2');
+  setSlider('ta', s.ta, 'lbl-ta');
+  setSlider('fc', s.fc, 'lbl-fc');
+  setTempVal(s.temp);
+  setSlider('qrr', s.qrr, 'lbl-qrr');
+  setSlider('qta', s.qta, 'lbl-qta');
+  setO2(s.o2); setConf(s.conf);
+  setRadio('avpu', s.avpu);
+  setRadio('hh', s.h); setRadio('ee', s.e); setRadio('aa', s.a);
+  setRadio('rr_', s.r); setRadio('tt', s.t);
+  compute();
+  showTab('triage');
+  const labels = {sepsis:'🦠 Sepsis sévère',acs:'❤️ SCA probable',resp:'🫁 Détresse respiratoire',stable:'✓ Patient stable'};
+  document.getElementById('patient-nom').value = 'Simulation — '+labels[cas];
+}
+
+function setSlider(id, val, lblId) {
+  const el = document.getElementById(id);
+  el.value = val;
+  syncSlider(el, lblId);
+}
+
+function setTempVal(val) {
+  const el = document.getElementById('temp');
+  el.value = Math.round(val*10);
+  syncTemp(el);
+}
+
+function setRadio(name, val) {
+  const el = document.querySelector(`input[name="${name}"][value="${val}"]`);
+  if (el) el.checked = true;
+}
+
+// ============================================================
+// UI HELPERS
+// ============================================================
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+function syncSlider(el, lblId) {
+  const pct = ((+el.value - +el.min) / (+el.max - +el.min)*100).toFixed(1);
+  el.style.setProperty('--pct', pct+'%');
+  document.getElementById(lblId).textContent = el.value;
+}
+
+function syncTemp(el) {
+  const pct = ((+el.value - +el.min) / (+el.max - +el.min)*100).toFixed(1);
+  el.style.setProperty('--pct', pct+'%');
+  document.getElementById('lbl-temp').textContent = (+el.value/10).toFixed(1);
+}
+
+function setO2(v) {
+  o2Val=v;
+  document.getElementById('o2-non').classList.toggle('active',v===0);
+  document.getElementById('o2-oui').classList.toggle('active',v===1);
+  compute();
+}
+
+function setConf(v) {
+  confVal=v;
+  document.getElementById('conf-non').classList.toggle('active',v===0);
+  document.getElementById('conf-oui').classList.toggle('active',v===1);
+  compute();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function updateClock() { document.getElementById('horloge').textContent = new Date().toLocaleTimeString('fr-FR'); }
+setInterval(updateClock,1000); updateClock();
+
+document.addEventListener('DOMContentLoaded', () => {
+  ['rr','spo2','ta','fc','qrr','qta'].forEach(id=>{ const el=document.getElementById(id); if(el) syncSlider(el,'lbl-'+id); });
   syncTemp(document.getElementById('temp'));
-  calcNews2(); calcQsofa(); calcHeart();
+  compute();
 });
 </script>
 </body>
