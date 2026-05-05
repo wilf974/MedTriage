@@ -72,6 +72,19 @@ Ce projet est un **démonstrateur technique**. Il ne remplace pas le jugement cl
 
 ---
 
+## Limites de validation
+
+MedTriage démontre comment des règles cliniques peuvent être rendues **déterministes, testables et auditables**. Plusieurs limites doivent être clairement posées :
+
+- **Scores conformes aux références publiées, mais non validés cliniquement dans cet environnement** : les algorithmes reproduisent les formules des publications originales (RCP 2017, JAMA 2016, NHJ 2010), mais n'ont pas fait l'objet d'une validation clinique indépendante dans cette implémentation.
+- **Tests unitaires ≠ validation médicale** : les 14 tests de la suite vérifient la cohérence logique du code. Ils ne constituent pas une validation clinique au sens réglementaire (études de performance, sensibilité/spécificité sur cohorte réelle).
+- **IEC 62304 non revendiquée comme acquise** : la conformité à cette norme implique, au-delà de la sûreté du langage, une gestion des risques (ISO 14971), une traçabilité des exigences, un cycle de vérification/validation documenté, et un processus qualité complet. Ces éléments ne sont pas couverts par ce projet.
+- **Usage en production interdit sans validation réglementaire** : tout déploiement dans un environnement clinique réel nécessiterait une analyse de risques, une validation sur données patients, un marquage CE dispositif médical logiciel (SaMD) et un processus qualité conforme.
+
+> MedTriage illustre des **propriétés techniques utiles à une démarche de certification** (determinisme, invariants formels, traçabilité des évaluations, sandbox sans effets de bord). Il ne prétend pas être un dispositif médical certifié.
+
+---
+
 ## Auteur
 
 Wilfred — construit avec [Aether v1.3](https://github.com/aether-lang) + Cowork (Anthropic)
