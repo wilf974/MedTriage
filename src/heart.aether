@@ -1,0 +1,40 @@
+;;; =============================================================
+;;; HEART Score — Risque de Syndrome Coronarien Aigu
+;;; Source : Six et al., Netherlands Heart Journal 2010
+;;; Usage  : Stratification du risque SCA aux urgences
+;;; =============================================================
+
+(@intent "HEART Score : stratification du risque coronarien aigu en 5 critères")
+(@invariant (and (>= result 0) (<= result 10)))
+(@example 2 1 2 1 2   8)
+(@example 1 0 0 0 0   1)
+(@example 0 0 0 0 0   0)
+(@example 2 2 2 2 2  10)
+
+(fn heart ((histoire num) (ecg num) (age num) (facteurs num) (troponine num)) num
+  ;; histoire  : 0=peu suspect 1=modérément suspect 2=très suspect
+  ;; ecg       : 0=normal 1=non-spécifique 2=ischémie significative
+  ;; age       : 0=<45ans 1=45-64ans 2=>=65ans
+  ;; facteurs  : 0=aucun 1=1-2 facteurs 2=>=3 facteurs ou ATCD coronarien
+  ;;             Facteurs : HTA, hyperchol., DT2, obésité, tabac, ATCD familial
+  ;; troponine : 0=normale 1=1-3x normale 2=>3x normale
+  (+ (+ (+ (+ histoire ecg) age) facteurs) troponine))
+
+(fn alerte_heart ((score num)) str
+  (if (<= score 3) "FAIBLE RISQUE — sortie possible + suivi cardiologique ambulatoire"
+    (if (<= score 6) "RISQUE MODÉRÉ — observation 12-24h + troponines sérielles"
+      "RISQUE ÉLEVÉ — coronarographie urgente recommandée")))
+
+(fn mace_risque ((score num)) str
+  ;; MACE = Major Adverse Cardiac Events (IDM, revascularisation, décès)
+  ;; Données : Backus et al. Critical Pathways in Cardiology 2010
+  (if (<= score 3) "~1.7% MACE à 6 semaines"
+    (if (<= score 6) "~12% MACE à 6 semaines"
+      "~65% MACE à 6 semaines")))
+
+(fn conduite_heart ((score num)) str
+  (if (<= score 3)
+    "ECG + troponine unique. Sortie si stable. Consultation cardio dans 72h."
+    (if (<= score 6)
+      "ECG sériel + troponine H0/H3/H6. Cardio de garde. Scope continu."
+      "ECG + troponine urgents. Aspirine 250mg. Cardio URGENCE. Coro si indiquée.")))

@@ -1,0 +1,11 @@
+# Aether
+*.aether.cache
+*.aether.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
